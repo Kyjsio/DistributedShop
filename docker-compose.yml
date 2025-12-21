@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: shop_mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SilneHaslo123321!SilneHaslo123321!
+    ports:
+      - "1433:1433"
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: shop_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
