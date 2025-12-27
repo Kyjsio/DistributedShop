@@ -3,6 +3,7 @@
     <File Path="docker-compose.yml" />
   </Folder>
   <Project Path="OrderService/OrderService.csproj" Id="3aab4790-95b7-4aaa-9161-cfa9b343f2eb" />
+  <Project Path="PaymentService/PaymentService.csproj" Id="3a6230b2-7547-4aa8-9dd6-cac52e1be346" />
   <Project Path="ProductService/ProductService.csproj" />
   <Project Path="Shared/Shared.csproj" Id="324af0f2-36e1-4f26-b41c-ea8a235aa35c" />
 </Solution>

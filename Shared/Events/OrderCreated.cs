@@ -3,7 +3,7 @@
     public interface OrderCreated
     {
         int OrderId { get; }
-        decimal TotalAmount { get; } // Kwota do zapłaty
-        int UserId { get; }         // Kto kupił (opcjonalne)
+        decimal TotalAmount { get; } 
+        int UserId { get; }         
     }
 }

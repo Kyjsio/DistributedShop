@@ -1,4 +1,4 @@
-﻿using MassTransit; // Ważne: do komunikacji z RabbitMQ
+﻿using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using OrderService.Data;
 using OrderService.Entities;
@@ -42,6 +42,19 @@ namespace OrderService.Controllers
             });
 
             return Ok(new { message = "Zamówienie przyjęte", orderId = newOrder.Id });
+        }
+        [HttpGet("getOrders")]
+        public async Task<IActionResult> GetOrders()
+        {
+            var orders = _context.Orders.ToList();
+            return Ok(orders);
+        }
+
+        [HttpPost("getOrder/{orderId}")]
+        public async Task<ActionResult> GetOrder(int orderId)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            return Ok(order);
         }
     }
 }

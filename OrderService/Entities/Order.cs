@@ -8,7 +8,7 @@ namespace OrderService.Entities
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         public int UserId { get; set; }
 
-        // NAPRAWA Decimal Warning
+
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
 
