@@ -15,7 +15,7 @@ builder.Services.AddMassTransit(x =>
         });
         cfg.ReceiveEndpoint("payment-service", e =>
         {
-            e.Consumer<PaymentServiceConsumer>(context);
+            e.ConfigureConsumer<PaymentServiceConsumer>(context);
         });
     });
 });

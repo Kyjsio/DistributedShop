@@ -4,5 +4,6 @@
     {
         int OrderId { get; }
         string Reason { get; }
+        DateTime FailedAt { get; }
     }
 }
