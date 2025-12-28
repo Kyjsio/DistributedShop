@@ -15,7 +15,7 @@ namespace ProductService.Controllers
             _context = context;
         }
   
-        [HttpGet("GetProducts")]
+        [HttpGet("getProducts")]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             var results = await _context.Products.ToListAsync();
@@ -23,7 +23,7 @@ namespace ProductService.Controllers
         }
 
 
-        [HttpPost("CreateProducts")]
+        [HttpPost("createProducts")]
         public async Task<ActionResult<Product>> Create(CreateProductDto productDto)
         {
            var product = new Product
@@ -39,7 +39,7 @@ namespace ProductService.Controllers
             return product;
         }
 
-        [HttpPut("UpdateProducts{id}")]
+        [HttpPut("updateProducts/{id}")]
         public  async Task<ActionResult> UpdateProduct(int id, CreateProductDto productDto)
         {
             var product = await _context.Products.FindAsync(id);
@@ -53,7 +53,7 @@ namespace ProductService.Controllers
             return NoContent();
         }
 
-        [HttpDelete("DeleteProducts{id}")]
+        [HttpDelete("deleteProducts/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);
