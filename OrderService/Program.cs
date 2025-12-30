@@ -1,16 +1,24 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using OrderService.Consumers;
 using OrderService.Data;
 using OrderService.Entities;
-using MassTransit;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMassTransit(x =>
-{
+{ 
+    x.AddConsumer<PaymentCompletedConsumer>();
+    x.AddConsumer<PaymentFailedConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", "/", h =>
         {
             h.Username("guest");
             h.Password("guest");
+        });
+        cfg.ReceiveEndpoint("order-payment-events", e =>
+        {
+            e.ConfigureConsumer<PaymentCompletedConsumer>(context);
+            e.ConfigureConsumer<PaymentFailedConsumer>(context);
         });
     });
 });

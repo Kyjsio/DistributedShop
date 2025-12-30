@@ -25,6 +25,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//api do pobierania kursu walut
+builder.Services.AddHttpClient("fx", c =>
+{
+    c.BaseAddress = new Uri("https://api.frankfurter.dev");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

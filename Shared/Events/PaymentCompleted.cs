@@ -4,5 +4,6 @@
     {
         int OrderId { get; }
         DateTime PaymentDate { get; }
+        decimal AmountEuro { get; }
     }
 }
