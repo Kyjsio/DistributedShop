@@ -7,6 +7,8 @@ using ProductService.Entities;
 
 namespace ProductService.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ProductController : Controller
     {
         private readonly ProductDbContext _context;
@@ -21,7 +23,18 @@ namespace ProductService.Controllers
             var results = await _context.Products.ToListAsync();
             return results;
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Product>> GetProduct(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
 
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return product;
+        }
 
         [HttpPost("createProducts")]
         public async Task<ActionResult<Product>> Create(CreateProductDto productDto)

@@ -2,6 +2,10 @@
   <Folder Name="/Elementy rozwiązania/">
     <File Path="docker-compose.yml" />
   </Folder>
+  <Project Path="frontendshop/frontendshop.esproj">
+    <Build />
+    <Deploy />
+  </Project>
   <Project Path="OrderService/OrderService.csproj" Id="3aab4790-95b7-4aaa-9161-cfa9b343f2eb" />
   <Project Path="PaymentService/PaymentService.csproj" Id="3a6230b2-7547-4aa8-9dd6-cac52e1be346" />
   <Project Path="ProductService/ProductService.csproj" />

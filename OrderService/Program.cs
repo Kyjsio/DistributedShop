@@ -4,6 +4,21 @@ using OrderService.Consumers;
 using OrderService.Data;
 using OrderService.Entities;
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+builder.Services.AddHttpClient("ProductClient", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5144/");
+});
 builder.Services.AddMassTransit(x =>
 { 
     x.AddConsumer<PaymentCompletedConsumer>();
@@ -30,7 +45,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
-
+app.UseCors(MyAllowSpecificOrigins);
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
