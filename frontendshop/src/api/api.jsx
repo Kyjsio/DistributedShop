@@ -29,7 +29,7 @@ export const createOrder = async (productId, quantity) => {
 };
 
 export const payForOrder = async (orderId) => {
-    const response = await fetch(`${API_BASE_ORDER}/${orderId}/pay`, {
+    await fetch(`${API_BASE_ORDER}/${orderId}/pay`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
     });
@@ -56,10 +56,24 @@ export const createProduct = async (product) => {
     });
     return await response.json();
 };
+export const updateProduct = async (id, product) => {
+    const response = await fetch(`${API_BASE_PRODUCT}/updateProducts/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(product)
+    });
+    if (!response.ok) {
+        throw new Error('B³¹d aktualizacji produktu');
+    }
 
+    return true;
+};
 export const deleteProduct = async (id) => {
     const response = await fetch(`${API_BASE_PRODUCT}/deleteProducts/${id}`, {
         method: 'DELETE'
     });
+    if (!response.ok) {
+        throw new Error('B³¹d usuwania produktu');
+    }
     return true;
 };

@@ -1,9 +1,7 @@
 ﻿import React, { useState } from 'react';
 
-// Upewnij się, że ten plik fizycznie znajduje się w folderze src/pages/
 import ProductManager from './pages/ProductManager'; 
 
-// Tutaj wskazujemy na plik OrderPage.jsx, ale w kodzie używamy nazwy OrderTerminal
 import OrderTerminal from './pages/OrderPage'; 
 
 function App() {
@@ -11,7 +9,7 @@ function App() {
 
     return (
         <div className="container-fluid bg-light min-vh-100">
-            {/* NAVBAR */}
+
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
                 <div className="container">
                     <a className="navbar-brand fw-bold" href="#">
@@ -35,12 +33,12 @@ function App() {
                 </div>
             </nav>
 
-            {/* CONTENT */}
+
             <div className="container pb-5">
                 {currentView === 'products' ? <ProductManager /> : <OrderTerminal />}
             </div>
 
-            {/* FOOTER */}
+
             <footer className="text-center text-muted mt-5 py-3 border-top">
                 <small>Distributed Shop System &copy; 2026</small>
             </footer>

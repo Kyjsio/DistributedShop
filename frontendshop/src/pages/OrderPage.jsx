@@ -21,8 +21,8 @@ const OrderTerminal = () => {
             if (data.length > 0) {
                 setSelectedProductId(data[0].id);
             }
-        } catch (error) {
-            addLog(`⚠️ Nie można pobrać produktów: ${error.message}`);
+        } catch {
+            addLog(`Nie można pobrać produktów`);
         }
     };
 
@@ -46,9 +46,9 @@ const OrderTerminal = () => {
             const productInfo = products.find(p => p.id == selectedProductId);
             const productName = productInfo ? productInfo.name : `ID: ${selectedProductId}`;
             
-            addLog(`✅ Utworzono zamówienie na: ${productName} (${quantity} szt.). Cena wg serwera: ${data.totalAmount} EUR`);
-        } catch (error) {
-            addLog(`❌ Błąd: ${error.message}`);
+            addLog(` Utworzono zamówienie na: ${productName} (${quantity} szt.). Cena wg serwera: ${data.totalAmount} PLN`);
+        } catch  {
+            addLog(`Błąd: Brak możliwości wykoanania zleceń`);
         } finally {
             setIsLoading(false);
         }
@@ -58,11 +58,11 @@ const OrderTerminal = () => {
         if (!order) return;
         setIsLoading(true);
         try {
-            addLog('📡 Płatność w toku (RabbitMQ)...');
+            addLog('Płatność w toku (RabbitMQ)...');
             await payForOrder(order.id);
-            addLog('📨 Wysłano żądanie płatności.');
-        } catch (error) {
-            addLog('❌ Błąd płatności.');
+            addLog('Wysłano żądanie płatności.');
+        } catch  {
+            addLog('Błąd płatności.');
         } finally {
             setIsLoading(false);
         }
@@ -76,10 +76,10 @@ const OrderTerminal = () => {
                     const updatedOrder = await getOrder(order.id);
                     if (updatedOrder.status !== order.status) {
                         setOrder(updatedOrder);
-                        if (updatedOrder.status === 1) addLog('💰 SUKCES! Status: PAID.');
-                        if (updatedOrder.status === 2) addLog('⛔ ANULOWANO! Status: CANCELLED.');
+                        if (updatedOrder.status === 1) addLog('SUKCES! Status: PAID.');
+                        if (updatedOrder.status === 2) addLog('ANULOWANO! Status: CANCELLED.');
                     }
-                } catch (err) { console.error(err); }
+                } catch (error) { console.error(error); }
             }, 2000);
         }
         return () => { if (interval) clearInterval(interval); };
@@ -96,7 +96,6 @@ const OrderTerminal = () => {
             <div className="card shadow-sm">
                 <div className="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                     <h5 className="mb-0">Symulator Zakupów</h5>
-                    <button onClick={loadProductsFromApi} className="btn btn-sm btn-outline-light">🔄 Odśwież produkty</button>
                 </div>
                 <div className="card-body">
                     
@@ -112,7 +111,7 @@ const OrderTerminal = () => {
                                     onChange={(e) => setSelectedProductId(e.target.value)}
                                     disabled={!!order}
                                 >
-                                    {products.length === 0 && <option>Ładowanie produktów...</option>}
+                                    {products.length === 0 && <option>Ładowanie produktów</option>}
                                     {products.map(p => (
                                         <option key={p.id} value={p.id}>
                                             {p.name} — {p.price} PLN (Stan: {p.stockQuantity})
@@ -146,11 +145,11 @@ const OrderTerminal = () => {
                     </div>
 
                     <hr />
-
+                    {/*Konsola Działań*/}
                     {order && (
                         <div className="alert alert-secondary text-center">
                             <h4>Zamówienie #{order.id}</h4>
-                            <div className="fs-5 mb-2">Do zapłaty: <strong>{order.totalAmount} EUR</strong></div>
+                            <div className="fs-5 mb-2">Do zapłaty: <strong>{order.totalAmount} PLN </strong></div>
                             <div className="mb-3">{getStatusBadge(order.status)}</div>
 
                             {order.status === 0 && (
