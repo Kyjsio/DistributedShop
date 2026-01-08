@@ -28,6 +28,8 @@ namespace OrderService.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto dto)
         {
+            var user = _context.Users.FirstOrDefault(u => u.Username == "test");
+
             if (dto?.Items == null || dto.Items.Count == 0)
             {
                 return BadRequest("Zamówienie musi mieć przynajmniej jeden produkt!");
@@ -58,13 +60,14 @@ namespace OrderService.Controllers
                 {
                     ProductId = itemDto.ProductId,
                     Quantity = itemDto.Quantity,
+                    UnitPrice = product.Price
                 });
             }
 
             var order = new Order
             {
                 OrderDate = DateTime.UtcNow,
-                UserId = dto.UserId,
+                UserId = user.Id,
                 Status = OrderStatus.Created,
                 Items = orderItems,
                 TotalAmount = totalAmount 
@@ -79,6 +82,8 @@ namespace OrderService.Controllers
         [HttpPost("{id}/pay")]
         public async Task<IActionResult> PayForOrder(int id)
         {
+            var user = _context.Users.FirstOrDefault(u => u.Username == "test");
+
             var order = await _context.Orders.FindAsync(id);
             if (order == null) return NotFound();
             if (order.Status == OrderStatus.Paid) return BadRequest("Już opłacone");
@@ -87,7 +92,7 @@ namespace OrderService.Controllers
             {
                 OrderId = order.Id,
                 TotalAmount = order.TotalAmount,
-                UserId = order.UserId
+                UserId = user.Id
             });
 
             return Accepted(new { message = "Płatność rozpoczęta..." });

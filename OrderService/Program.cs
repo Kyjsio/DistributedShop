@@ -32,7 +32,10 @@ builder.Services.AddMassTransit(x =>
         });
         cfg.ReceiveEndpoint("order-payment-events", e =>
         {
-            e.ConfigureConsumer<PaymentCompletedConsumer>(context);
+            e.ConfigureConsumer<PaymentCompletedConsumer>(context);            
+        });
+        cfg.ReceiveEndpoint("order-payment-failed-events", e =>
+        {
             e.ConfigureConsumer<PaymentFailedConsumer>(context);
         });
     });
@@ -46,10 +49,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
     db.Database.Migrate();
+
+    if (!db.Users.Any(u => u.Username == "test"))
+    {
+        db.Users.Add(new User { Username = "test" });
+        db.SaveChanges();
+    }
 }
 
 if (app.Environment.IsDevelopment())
