@@ -51,7 +51,8 @@ namespace PaymentService.Consumers
                 {
                     OrderId = message.OrderId,
                     PaymentDate = DateTime.UtcNow,
-                    AmountEuro = amountEur
+                    AmountEuro = amountEur,
+                    Items = message.Items.Select(i => new { i.ProductId, i.Quantity }).ToList()
                 }, context.CancellationToken);
 
                 _logger.LogInformation("Płatność dla OrderId={OrderId}", message.OrderId);

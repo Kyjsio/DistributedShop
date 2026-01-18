@@ -1,7 +1,27 @@
 using Microsoft.EntityFrameworkCore;
 using ProductService.Data;
+using MassTransit;
+using ProductService.Consumers;
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<PaymentCompletedConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+
+        cfg.ReceiveEndpoint("product-payment-completed", e =>
+        {
+            e.ConfigureConsumer<PaymentCompletedConsumer>(context);
+        });
+    });
+});
 
 
 builder.Services.AddControllers();
@@ -20,6 +40,7 @@ builder.Services.AddCors(options =>
                           .AllowAnyMethod();
                       });
 });
+
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {

@@ -46,12 +46,17 @@ namespace OrderService.Controllers
 
             foreach (var itemDto in dto.Items)
             {
-                var product = await productClient.GetFromJsonAsync<ProductDto>($"api/product/{itemDto.ProductId}");
+                var response = await productClient.GetAsync($"api/product/{itemDto.ProductId}");
 
-                if (product == null)
+                if (!response.IsSuccessStatusCode)
                 {
                     return BadRequest($"Produkt o ID {itemDto.ProductId} nie istnieje w systemie ProductService.");
                 }
+
+                var product = await response.Content.ReadFromJsonAsync<ProductDto>();
+
+                if (product == null)
+                    return BadRequest($"Nie udało się odczytać produktu {itemDto.ProductId} z ProductService.");
 
                 decimal itemTotal = product.Price * itemDto.Quantity;
                 totalAmount += itemTotal;
@@ -84,7 +89,9 @@ namespace OrderService.Controllers
         {
             var user = _context.Users.FirstOrDefault(u => u.Username == "test");
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders
+                .Include(o => o.Items)
+                .FirstOrDefaultAsync(o => o.Id == id);
             if (order == null) return NotFound();
             if (order.Status == OrderStatus.Paid) return BadRequest("Już opłacone");
 
@@ -92,21 +99,16 @@ namespace OrderService.Controllers
             {
                 OrderId = order.Id,
                 TotalAmount = order.TotalAmount,
-                UserId = user.Id
+                UserId = user.Id,
+                Items = order.Items.Select(i => new
+                {
+                    ProductId = i.ProductId,
+                    Quantity = i.Quantity
+                }).ToList()
             });
 
             return Accepted(new { message = "Płatność rozpoczęta..." });
         }
-
-        //GET /api/orders
-        //[HttpGet]
-        //public async Task<IActionResult> GetOrders()
-        //{
-        //    var orders = await _context.Orders
-        //        .Include(o => o.Items)
-        //        .ToListAsync();
-        //    return Ok(orders);
-        //}
 
         //GET /api/orders/{id}
         [HttpGet("{orderId}")]

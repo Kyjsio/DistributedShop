@@ -13,7 +13,7 @@ function App() {
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
                 <div className="container">
                     <a className="navbar-brand fw-bold" href="#">
-                        🛍️ ShopSystem <span className="badge bg-secondary">Microservices</span>
+                        ShopSystem
                     </a>
                     
                     <div className="d-flex gap-2">
@@ -21,13 +21,13 @@ function App() {
                             className={`btn ${currentView === 'products' ? 'btn-light' : 'btn-outline-light'}`}
                             onClick={() => setCurrentView('products')}
                         >
-                            📦 Produkty
+                            Produkty
                         </button>
                         <button 
                             className={`btn ${currentView === 'orders' ? 'btn-light' : 'btn-outline-light'}`}
                             onClick={() => setCurrentView('orders')}
                         >
-                            💳 Terminal Płatniczy
+                            Zamowienie
                         </button>
                     </div>
                 </div>

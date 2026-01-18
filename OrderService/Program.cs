@@ -15,32 +15,32 @@ builder.Services.AddCors(options =>
                   .AllowAnyMethod();
         });
 });
+var productBase = builder.Configuration["ProductClient:BaseUrl"] ?? "http://localhost:5144/";
 builder.Services.AddHttpClient("ProductClient", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5144/");
-});
-builder.Services.AddMassTransit(x =>
-{ 
-    x.AddConsumer<PaymentCompletedConsumer>();
-    x.AddConsumer<PaymentFailedConsumer>();
-    x.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.Host("localhost", "/", h =>
-        {
-            h.Username("guest");
-            h.Password("guest");
-        });
-        cfg.ReceiveEndpoint("order-payment-events", e =>
-        {
-            e.ConfigureConsumer<PaymentCompletedConsumer>(context);            
-        });
-        cfg.ReceiveEndpoint("order-payment-failed-events", e =>
-        {
-            e.ConfigureConsumer<PaymentFailedConsumer>(context);
-        });
-    });
+    client.BaseAddress = new Uri(productBase);
 });
 
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<PaymentCompletedConsumer>();
+    x.AddConsumer<PaymentFailedConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        var rabbitHost = builder.Configuration["Rabbit:Host"] ?? "localhost";
+        var rabbitUser = builder.Configuration["Rabbit:User"] ?? "guest";
+        var rabbitPass = builder.Configuration["Rabbit:Pass"] ?? "guest";
+
+        cfg.Host(rabbitHost, "/", h =>
+        {
+            h.Username(rabbitUser);
+            h.Password(rabbitPass);
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 builder.Services.AddDbContext<OrderDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

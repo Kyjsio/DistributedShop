@@ -57,7 +57,7 @@ namespace ProductService.Controllers
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null) return NotFound();
-            product.StockQuantity = product.StockQuantity;
+            product.StockQuantity = productDto.StockQuantity;
             product.Price = productDto.Price;
             product.Name = productDto.Name;
             product.Description = productDto.Description;

@@ -145,7 +145,7 @@ const OrderTerminal = () => {
                     </div>
 
                     <hr />
-                    {/*Konsola Działań*/}
+
                     {order && (
                         <div className="alert alert-secondary text-center">
                             <h4>Zamówienie #{order.id}</h4>
@@ -158,7 +158,7 @@ const OrderTerminal = () => {
                                     disabled={isLoading}
                                     className="btn btn-warning w-100 fw-bold btn-lg"
                                 >
-                                    {isLoading ? 'Przetwarzanie...' : '💳 Zapłać'}
+                                    {isLoading ? 'Przetwarzanie...' : 'Zapłać'}
                                 </button>
                             )}
                             
