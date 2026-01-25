@@ -30,6 +30,7 @@ namespace OrderService.Consumers
             }
 
             order.Status = OrderStatus.Paid;
+            order.AmountEuro = msg.AmountEuro;
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Zamowienie {OrderId} opłacone (Amount EUR: {Amount})",msg.OrderId, msg.AmountEuro);

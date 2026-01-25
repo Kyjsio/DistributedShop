@@ -14,5 +14,6 @@ namespace OrderService.Entities
 
         public OrderStatus Status { get; set; } = OrderStatus.Created;
         public List<OrderItem> Items { get; set; } = new();
+        public decimal? AmountEuro { get; set; }
     }
 }

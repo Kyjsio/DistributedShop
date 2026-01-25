@@ -150,6 +150,12 @@ const OrderTerminal = () => {
                         <div className="alert alert-secondary text-center">
                             <h4>Zamówienie #{order.id}</h4>
                             <div className="fs-5 mb-2">Do zapłaty: <strong>{order.totalAmount} PLN </strong></div>
+                            {order.amountEuro != null && (
+                                <div className="fs-6">
+                                    Przeliczone: <strong>{order.amountEuro} EUR</strong> (z zewnętrznego FX API)
+                                </div>
+                            )}
+
                             <div className="mb-3">{getStatusBadge(order.status)}</div>
 
                             {order.status === 0 && (
